@@ -37,4 +37,4 @@ app.use("/api/v1", payment);
 // Middleware for Errors
 app.use(errorMiddleware);
 
-module.exports = app;
+module.exports = app
