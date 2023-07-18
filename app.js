@@ -13,6 +13,14 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 }
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(
+  cors({
+    credentials: true,
+    origin: ["https://funny-faun-69aa8d.netlify.app", "http://localhost:3000"],
+  })
+);
+
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(fileUpload());
