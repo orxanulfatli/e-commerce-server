@@ -8,25 +8,46 @@ const cloudinary = require("cloudinary");
 
 // Register a User
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-  const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-    folder: "avatars",
-    width: 150,
-    crop: "scale",
-  });
-
   const { name, email, password } = req.body;
+  const { avatar } = req.body;
 
-  const user = await User.create({
-    name,
-    email,
-    password,
-    avatar: {
-      public_id: myCloud.public_id,
-      url: myCloud.secure_url,
-    },
-  });
+  if (!avatar) {
+    return next(new ErrorHander("Please select an avatar image", 400));
+  }
 
-  sendToken(user, 201, res);
+  let uploadedAvatar;
+
+  try {
+    uploadedAvatar = await cloudinary.v2.uploader.upload(avatar, {
+      folder: "avatars",
+      width: 150,
+      crop: "scale",
+    });
+
+    const user = await User.create({
+      name,
+      email,
+      password,
+      avatar: {
+        public_id: uploadedAvatar.public_id,
+        url: uploadedAvatar.secure_url,
+      },
+    });
+
+    sendToken(user, 201, res);
+  } catch (error) {
+    // Roll back uploaded image if DB create fails after Cloudinary upload.
+    if (uploadedAvatar?.public_id) {
+      try {
+        await cloudinary.v2.uploader.destroy(uploadedAvatar.public_id);
+      } catch (destroyError) {
+        console.error("[registerUser] avatar rollback failed:", destroyError.message);
+      }
+    }
+
+    console.error("[registerUser] failed:", error.message);
+    return next(error);
+  }
 });
 
 // Login User
@@ -40,7 +61,6 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
   }
 
   const user = await User.findOne({ email }).select("+password");
-  console.log(user)
   if (!user) {
     return next(new ErrorHander("Invalid email or password", 401));
   }

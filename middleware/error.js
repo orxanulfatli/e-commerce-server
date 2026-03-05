@@ -28,6 +28,27 @@ module.exports = (err, req, res, next) => {
     err = new ErrorHandler(message, 400);
   }
 
+  if (process.env.NODE_ENV !== "PRODUCTION") {
+    console.error("[API ERROR]", {
+      method: req.method,
+      path: req.originalUrl,
+      statusCode: err.statusCode,
+      name: err.name,
+      code: err.code,
+      message: err.message,
+    });
+
+    return res.status(err.statusCode).json({
+      success: false,
+      message: err.message,
+      error: {
+        name: err.name,
+        code: err.code || null,
+      },
+      stack: err.stack,
+    });
+  }
+
   res.status(err.statusCode).json({
     success: false,
     message: err.message,
