@@ -52,6 +52,6 @@ Note:
 
 ## Author
 
-
-**LinkedIn** Click [Here](https://www.linkedin.com/in/orxanulfatli/) 
+Orxan Ulfatli  
+**LinkedIn:** [https://www.linkedin.com/in/orxanulfatli/](https://www.linkedin.com/in/orxanulfatli/)
 
