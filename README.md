@@ -12,25 +12,43 @@ Hi! My name is **Orxan Ulfatli**,This is full stack e-commerce app with full fun
 
 ## Env Variables
 
-Make Sure to Create a config.env file in backend/config directory and add appropriate variables in order to use the app.
+Create `config/config.env` in this server project root and fill it with:
 
-**Essential Variables**
+```env
+# Server
 PORT=
-DB_URI =
+NODE_ENV=DEVELOPMENT
+
+# Database
+DB_URI=
+
+# Auth
+JWT_SECRET=
+JWT_EXPIRE=5d
+COOKIE_EXPIRE=5
+
+# Client URL (used in password reset link)
+CLIENT_URI=http://localhost:3000
+
+# Stripe
 STRIPE_API_KEY=
 STRIPE_SECRET_KEY=
-JWT_SECRET=
-JWT_EXPIRE=
-COOKIE_EXPIRE=
-SMPT_SERVICE =
-SMPT_MAIL=
-SMPT_PASSWORD=
+
+# SMTP (note: code uses SMPT_* variable names)
 SMPT_HOST=
 SMPT_PORT=
-CLOUDINARY_NAME
-CLOUDINARY_API_KEY
-CLOUDINARY_API_SECRET
-_fill each filed with your info respectively_
+SMPT_MAIL=
+SMPT_PASSWORD=
+
+# Cloudinary
+CLOUDINARY_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+```
+
+Note:
+- `config/config.env` is ignored by git, so it will not be pushed.
+- For deployed environments, set the same variables in your hosting provider's Environment Variables section.
 
 ## Author
 
