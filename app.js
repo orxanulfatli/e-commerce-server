@@ -15,10 +15,21 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 
 app.use(express.json());
 // app.use(express.urlencoded({ extended: false }));
+
+const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:3000")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 app.use(
   cors({
     credentials: true,
-    origin: ["https://funny-faun-69aa8d.netlify.app", "http://localhost:3000"],
+    origin: (origin, callback) => {
+      // Allow server-to-server and same-origin requests without Origin header.
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error("Not allowed by CORS"));
+    },
   })
 );
 

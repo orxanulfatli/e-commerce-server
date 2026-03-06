@@ -30,6 +30,9 @@ COOKIE_EXPIRE=5
 # Client URL (used in password reset link)
 CLIENT_URI=http://localhost:3000
 
+# CORS allowed origins (comma-separated)
+CORS_ORIGIN=http://localhost:3000
+
 # Stripe
 STRIPE_API_KEY=
 STRIPE_SECRET_KEY=
