@@ -2,6 +2,7 @@
 
 const sendToken = (user, statusCode, res) => {
   const token = user.getJWTToken();
+  const isProduction = process.env.NODE_ENV === "PRODUCTION";
 
   // options for cookie
   const options = {
@@ -9,6 +10,8 @@ const sendToken = (user, statusCode, res) => {
       Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
+    sameSite: isProduction ? "none" : "lax",
+    secure: isProduction,
   };
 
   res.status(statusCode).cookie("token", token, options).json({
